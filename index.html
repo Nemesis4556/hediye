@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#04030a">
+  <title>Sude nalbant için özel </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { padding:0; margin:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --dark: #04030a;
+      --rose-gold: #c9a87c;
+      --rose-gold-light: #e8cfa0;
+      --petal: #f8f5ef;
+      --petal-mid: #ffffff;
+      --petal-edge: #ede8df;
+      --petal-shadow: #d0c8bc;
+      --stem: #1e4a2a;
+      --stem-light: #2e6a3e;
+      --leaf: #1a5e30;
+      --leaf-light: #29844a;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* MOBİL UYUM DÜZELTMESİ: flex-start yerine center yapıldı */
+      justify-content: center; 
+      min-height: 100vh;
+      min-height: 100dvh;
+      background-color: var(--dark);
+      overflow: hidden;
+      perspective: 1200px;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      touch-action: none;
+    } 
+    /* ── MINİMAL WHATSAPP BUTONU ── */
+    /* ── ARA ÇİZGİ (Mesafesi daraltıldı) ── */
+    .divider {
+      width: 1px; height: 0;
+      background: linear-gradient(to bottom,transparent,var(--rose-gold),transparent);
+      margin: 5px auto 0; /* 10px'den 5px'e düşürülerek alan daraltıldı */
+      animation: grow-line 1.2s cubic-bezier(.16,1,.3,1) 2.2s forwards;
+    }
+
+   /* ── MİNİMAL WHATSAPP BUTONU ── */
+    .wa-button {
+      display: inline-block;
+      margin-top: 15px; /* Çizgiden sonraki boşluk */
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid rgba(201, 168, 124, 0.35); /* Çok zarif, ince bir çerçeve */
+      color: rgba(232, 207, 160, 0.65); /* Arka planla uyumlu, göz yormayan renk */
+      text-decoration: none;
+      font-family: 'Tenor Sans', sans-serif;
+      font-size: 8.5px; /* Minimal yazı boyutu */
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: all 0.4s ease;
+      opacity: 0;
+      animation: rise 2s cubic-bezier(.16,1,.3,1) 2.5s forwards;
+      pointer-events: auto; /* Tıklanabilirlik için kritik */
+      z-index: 100;
+      position: relative;
+    }
+
+    .wa-button:hover {
+      background: rgba(201, 168, 124, 0.08);
+      color: var(--rose-gold-light);
+      border-color: var(--rose-gold);
+      letter-spacing: 0.3em; /* Hover yapınca hafifçe genişleme efekti */
+    }
+
+    /* Eğer header-text'te pointer-events: none varsa butonu kurtarmak için: */
+    .header-text {
+      pointer-events: none;
+    }
+    .header-text .wa-button {
+      pointer-events: auto;
+    }
+    /* ── GECE ── */
+    .night {
+      position: fixed; inset: 0;
+      filter: blur(0.08vmin);
+      background-image:
+        radial-gradient(ellipse 80% 55% at 50% 0%, rgba(180,140,80,0.03) 0%, transparent 70%),
+        radial-gradient(ellipse at top, transparent 0%, var(--dark) 72%),
+        radial-gradient(ellipse at bottom, var(--dark), rgba(60,40,10,0.08)),
+        repeating-linear-gradient(215deg, #000 0px, #000 18px, transparent 18px, transparent 22px),
+        repeating-linear-gradient(175deg, #000 0px, #000 18px, transparent 18px, transparent 22px),
+        repeating-linear-gradient(145deg, #000 0px, #000 18px, transparent 18px, transparent 22px),
+        linear-gradient(90deg, rgb(255,210,120), rgb(240,235,220));
+    }
+
+    .stars { position:fixed; inset:0; pointer-events:none; z-index:1; }
+    .star {
+      position:absolute; border-radius:50%; background:#fff;
+      animation: twinkle var(--d,3s) var(--del,0s) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0%   { opacity:.04; transform:scale(.8); }
+      100% { opacity:.45; transform:scale(1.1); }
+    }
+
+    /* ── BAŞLIK ── */
+    .header-text {
+      position: absolute; /* Sayfada bağımsız konumlama için */
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      text-align: center;
+      padding: clamp(30px, 8vh, 80px) 16px; /* Üstten biraz boşluk bırakır */
+      pointer-events: none;
+    }
+    .header-text .eyebrow {
+      font-family:'Tenor Sans',sans-serif;
+      font-size:clamp(7px,2.5vw,10px);
+      letter-spacing:.35em; text-transform:uppercase;
+      color:rgba(201,168,120,.4);
+      opacity:0; animation:rise 1.6s cubic-bezier(.16,1,.3,1) 1.2s forwards;
+    }
+    .header-text h1 {
+      font-size:clamp(18px,5vw,42px); font-weight:300; line-height:1.25;
+      color:rgba(248,245,239,.9); margin-top:6px;
+      opacity:0; animation:rise 1.8s cubic-bezier(.16,1,.3,1) 1.5s forwards;
+      padding: 0 10px;
+    }
+    .header-text h1 em { font-style:italic; color:var(--rose-gold-light); }
+    .header-text p {
+      font-size:clamp(9px,3vw,13px); font-style:italic;
+      color:rgba(201,168,120,.35); letter-spacing:.04em; margin-top:8px;
+      opacity:0; animation:rise 2s cubic-bezier(.16,1,.3,1) 1.8s forwards;
+      padding: 0 20px;
+    }
+    .divider {
+      width:1px; height:0;
+      background:linear-gradient(to bottom,transparent,var(--rose-gold),transparent);
+      margin:10px auto 0;
+      animation:grow-line 1.2s cubic-bezier(.16,1,.3,1) 2.2s forwards;
+    }
+    @keyframes grow-line { to { height:20px; } }
+    @keyframes rise {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      position:fixed; bottom:clamp(8px,2vh,20px); left:0; right:0; z-index:50;
+      display:flex; justify-content:space-between;
+      padding:0 clamp(12px,4vw,40px);
+      pointer-events:none;
+      opacity:0; animation:rise 1.5s ease 3s forwards;
+    }
+    .footer span {
+      font-family:'Tenor Sans',sans-serif; font-size:8px;
+      letter-spacing:.25em; text-transform:uppercase;
+      color:rgba(201,168,120,.2);
+    }
+    .footer .heart {
+      font-size:10px; color:rgba(201,168,120,.3);
+      animation:heartbeat 2.5s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%,100%{opacity:.3;transform:scale(1)} 50%{opacity:.6;transform:scale(1.12)}
+    }
+
+    /* ── VİNYET ── */
+    .vignette {
+      position:fixed; inset:0; z-index:40; pointer-events:none;
+      background:radial-gradient(ellipse 85% 85% at 50% 50%,transparent 40%,rgba(4,3,10,.7) 100%);
+    }
+
+    /* ── LOADER ── */
+    .loader {
+      position:fixed; inset:0; z-index:200; background:var(--dark);
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+      transition:opacity .8s ease,visibility .8s ease;
+    }
+    .loader.hidden { opacity:0; visibility:hidden; }
+    .loader-ring {
+      width:40px; height:40px;
+      border:1px solid rgba(201,168,120,.1); border-top-color:var(--rose-gold);
+      border-radius:50%; animation:spin 1s linear infinite;
+    }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .loader-text {
+      font-family:'Tenor Sans',sans-serif; font-size:8px;
+      letter-spacing:.35em; text-transform:uppercase; color:rgba(201,168,120,.35);
+    }
+
+    /* ════════════════════════════════════════
+       ÇİÇEK SAHNESİ - MOBİL UYUMLU
+    ════════════════════════════════════════ */
+ /* ════════ ÇİÇEK SAHNESİ ════════ */
+    .flowers {
+      position: absolute;
+      bottom: 22vh; /* Buketi dipten yukarı çeker (Değeri artırarak daha da yükseltebilirsiniz) */
+      left: 50%;
+      transform: translateX(-50%) scale(0.85);
+      z-index: 10;
+    }
+@media (max-width: 480px) {
+      .flowers { 
+        transform: translateX(-50%) scale(0.7); 
+        bottom: 18vh; /* Mobilde metne çarpmaması için biraz daha aşağıda durur */
+      }
+      .header-text { padding-top: 40px; } /* Mobilde metin çok yukarı çıkmasın */
+    }
+
+    @media (min-width: 481px) and (max-width: 768px) {
+      .flowers { 
+        transform: translateX(-50%) scale(0.8); 
+        bottom: 20vh; 
+      }
+    }
+
+    /* ── GÜL KONTEYNER ── */
+    .flower {
+      position:absolute;
+      bottom:10vmin;
+      transform-origin:bottom center;
+      --fl-speed:0.9s;
+    }
+    .flower--1 { animation:sway-1 5s ease-in-out infinite; }
+    .flower--2 { left:50%; transform:rotate(18deg); animation:sway-2 5s ease-in-out infinite; }
+    .flower--3 { left:50%; transform:rotate(-14deg); animation:sway-3 5s ease-in-out infinite; }
+    @keyframes sway-1 { 0%,100%{transform:rotate(1deg)} 50%{transform:rotate(-1deg)} }
+    @keyframes sway-2 { 0%,100%{transform:rotate(20deg)} 50%{transform:rotate(16deg)} }
+    @keyframes sway-3 { 0%,100%{transform:rotate(-12deg)} 50%{transform:rotate(-16deg)} }
+
+    /* ── TAÇYAPRAKLAR GRUBU ── */
+    .flower__petals {
+      position:relative;
+      animation:bloom-group 2s backwards;
+    }
+    .flower__petals--1 { animation-delay:1.0s; }
+    .flower__petals--2 { animation-delay:1.4s; }
+    .flower__petals--3 { animation-delay:1.8s; }
+    @keyframes bloom-group { 0%{transform:scale(0);opacity:0;} }
+
+    /* Gül halo parıltısı - azaltıldı */
+    .flower__petals::after {
+      content:'';
+      position:absolute; left:0; top:0;
+      transform:translate(-50%,-105%);
+      width:8vmin; height:8vmin;
+      background:rgba(255,248,220,.25);
+      filter:blur(6vmin);
+    }
+
+    /* ── YAPRAK (petal) ── */
+    .petal {
+      position:absolute; bottom:0; left:50%;
+      transform-origin:bottom center;
+      border-radius:50% 50% 45% 55% / 55% 45% 55% 45%;
+      box-shadow:inset 0 0 2vmin rgba(255,255,255,.4),inset 0 -1vmin 1.5vmin rgba(200,185,162,.18);
+      opacity:.94;
+    }
+
+    /* Katman boyutları */
+    .petal-l1{width:4.5vmin;height:6.5vmin;background-image:linear-gradient(to top,#e8e2d8,#fff);}
+    .petal-l2{width:6.5vmin;height:9vmin;background-image:linear-gradient(to top,#e2dcd2,#fff);}
+    .petal-l3{width:7.5vmin;height:10.5vmin;background-image:linear-gradient(to top,var(--petal-shadow),var(--petal-mid));}
+    .petal-l4{width:8.5vmin;height:12vmin;background-image:linear-gradient(to top,var(--petal-edge),var(--petal-mid));}
+    .petal-l5{width:9.5vmin;height:13vmin;background-image:linear-gradient(to top,#cec8be,var(--petal));opacity:.82;}
+
+    /* ── 5 katman pozisyon ve animasyonları ── */
+    /* KAT 1 — en iç */
+    .p1-1{transform:translate(-50%,4%) rotate(0deg)   rotateX(-55deg); animation:bp-up var(--fl-speed) 2.0s backwards;}
+    .p1-2{transform:translate(-50%,4%) rotate(72deg)  rotateX(-55deg); animation:bp-up var(--fl-speed) 2.1s backwards;}
+    .p1-3{transform:translate(-50%,4%) rotate(144deg) rotateX(-55deg); animation:bp-up var(--fl-speed) 2.2s backwards;}
+    .p1-4{transform:translate(-50%,4%) rotate(216deg) rotateX(-55deg); animation:bp-up var(--fl-speed) 2.3s backwards;}
+    .p1-5{transform:translate(-50%,4%) rotate(288deg) rotateX(-55deg); animation:bp-up var(--fl-speed) 2.4s backwards;}
+    /* KAT 2 */
+    .p2-1{transform:translate(-50%,2%) rotate(36deg)  rotateX(-44deg); animation:bp-up var(--fl-speed) 1.8s backwards;}
+    .p2-2{transform:translate(-50%,2%) rotate(108deg) rotateX(-44deg); animation:bp-up var(--fl-speed) 1.7s backwards;}
+    .p2-3{transform:translate(-50%,2%) rotate(180deg) rotateX(-44deg); animation:bp-up var(--fl-speed) 1.6s backwards;}
+    .p2-4{transform:translate(-50%,2%) rotate(252deg) rotateX(-44deg); animation:bp-up var(--fl-speed) 1.5s backwards;}
+    .p2-5{transform:translate(-50%,2%) rotate(324deg) rotateX(-44deg); animation:bp-up var(--fl-speed) 1.7s backwards;}
+    /* KAT 3 */
+    .p3-1{transform:translate(-50%,0%) rotate(18deg)  rotateX(-30deg); animation:bp-out var(--fl-speed) 1.4s backwards;}
+    .p3-2{transform:translate(-50%,0%) rotate(90deg)  rotateX(-30deg); animation:bp-out var(--fl-speed) 1.3s backwards;}
+    .p3-3{transform:translate(-50%,0%) rotate(162deg) rotateX(-30deg); animation:bp-out var(--fl-speed) 1.5s backwards;}
+    .p3-4{transform:translate(-50%,0%) rotate(234deg) rotateX(-30deg); animation:bp-out var(--fl-speed) 1.2s backwards;}
+    .p3-5{transform:translate(-50%,0%) rotate(306deg) rotateX(-30deg); animation:bp-out var(--fl-speed) 1.4s backwards;}
+    /* KAT 4 */
+    .p4-1{transform:translate(-30%,2%)  rotateY(38deg) rotateX(-18deg); animation:bp-r var(--fl-speed) 1.1s backwards;}
+    .p4-2{transform:translate(-50%,-4%) rotateX(32deg);                 animation:bp-out var(--fl-speed) 1.0s backwards;}
+    .p4-3{transform:translate(-70%,0%)  rotateY(-38deg) rotateX(-18deg);animation:bp-l var(--fl-speed) 1.0s backwards;}
+    .p4-4{transform:translate(-50%,2%)  rotate(180deg) rotateX(-20deg); animation:bp-out var(--fl-speed) 1.2s backwards;}
+    .p4-5{transform:translate(-50%,2%)  rotate(90deg)  rotateX(-22deg); animation:bp-out var(--fl-speed) 0.9s backwards;}
+    /* KAT 5 — en dış */
+    .p5-1{transform:translate(-10%,5%)  rotateY(46deg) rotateX(-10deg); animation:bp-r var(--fl-speed) 0.8s backwards;}
+    .p5-2{transform:translate(-50%,-7%) rotateX(42deg);                 animation:bp-out var(--fl-speed) 0.9s backwards;}
+    .p5-3{transform:translate(-90%,3%)  rotateY(-48deg) rotateX(-8deg); animation:bp-l var(--fl-speed) 0.7s backwards;}
+    .p5-4{transform:translate(-30%,5%)  rotate(135deg) rotateX(-12deg); animation:bp-r var(--fl-speed) 0.8s backwards;}
+    .p5-5{transform:translate(-70%,5%)  rotate(-135deg)rotateX(-12deg); animation:bp-l var(--fl-speed) 0.7s backwards;}
+
+    @keyframes bp-up  { 0%{transform-origin:bottom center;transform:translate(-50%,4%) rotateX(-55deg) scale(0);} }
+    @keyframes bp-out { 0%{transform-origin:bottom center;transform:scale(0) rotateX(-32deg);} }
+    @keyframes bp-r   { 0%{transform-origin:bottom left; transform:rotateY(42deg) rotateX(-15deg) scale(0);} }
+    @keyframes bp-l   { 0%{transform-origin:bottom right;transform:rotateY(-42deg) rotateX(-15deg) scale(0);} }
+
+    /* ── GÜL MERKEZİ ── azaltılmış parıltı */
+    .flower__center {
+      position:absolute; left:-3.5vmin; top:-2.5vmin;
+      width:8vmin; height:3.5vmin; border-radius:50%;
+      background:radial-gradient(ellipse at 40% 35%,#fffde8,#f0d88a 60%,#c9a040);
+      box-shadow:0 0 1.2vmin rgba(255,220,100,.25),inset 0 0 .4vmin rgba(180,140,40,.2);
+      z-index:5;
+    }
+    .flower__center::after {
+      content:''; position:absolute; left:50%; top:50%;
+      transform:translate(-50%,-50%);
+      width:58%; height:58%; border-radius:inherit;
+      background:repeating-conic-gradient(rgba(180,130,20,.04) 0deg 15deg,transparent 15deg 30deg);
+    }
+
+    /* ── IŞIK PARÇACIKLARI ── azaltılmış */
+    .flower__light {
+      position:absolute; bottom:0;
+      width:.6vmin; height:.6vmin; border-radius:50%;
+      background:var(--rose-gold-light); filter:blur(.12vmin);
+      animation:light-float 4s linear infinite backwards;
+      opacity: .7;
+    }
+    .flower__light:nth-child(odd){background:rgba(255,248,200,.75);}
+    .flower__light--1{left:-2vmin;  animation-delay:1.0s;}
+    .flower__light--2{left:3vmin;   animation-delay:.5s;}
+    .flower__light--3{left:-5vmin;  animation-delay:.3s;}
+    .flower__light--4{left:5vmin;   animation-delay:.9s;}
+    .flower__light--5{left:-1vmin;  animation-delay:1.5s;}
+    .flower__light--6{left:-3.5vmin;animation-delay:3.0s;}
+    .flower__light--7{left:2.5vmin; animation-delay:2.0s;}
+    .flower__light--8{left:-5.5vmin;animation-delay:3.5s;}
+    @keyframes light-float {
+      0%  {opacity:0;transform:translateY(0);}
+      20% {opacity:.6;transform:translateY(-4vmin) translateX(-1.5vmin);}
+      55% {opacity:.5;transform:translateY(-14vmin) translateX(1.5vmin);filter:blur(.15vmin);}
+      80% {transform:translateY(-22vmin) translateX(-1.5vmin);filter:blur(.2vmin);}
+      100%{transform:translateY(-32vmin);opacity:0;filter:blur(.8vmin);}
+    }
+
+    /* ── SAP ── */
+    .flower__stem {
+      width:1.4vmin;
+      background-image:
+        linear-gradient(to left,rgba(0,0,0,.12),transparent,rgba(255,255,255,.12)),
+        linear-gradient(to top,transparent 8%,var(--stem),var(--stem-light));
+      box-shadow:inset 0 0 1.5px rgba(0,0,0,.38);
+      animation:grow-stem 3.5s backwards;
+    }
+    .flower--1 .flower__stem{height:68vmin;animation-delay:.3s;}
+    .flower--2 .flower__stem{height:57vmin;animation-delay:.5s;}
+    .flower--3 .flower__stem{height:54vmin;animation-delay:.7s;}
+    @keyframes grow-stem{0%{height:0;border-radius:1vmin;}}
+
+    /* ── SAP YAN YAPRAKLARI ── */
+    .stem-leaf{
+      --w:6.5vmin; --h:calc(var(--w) + 2.5vmin);
+      position:absolute; top:20%; left:90%;
+      width:var(--w); height:var(--h);
+      border-top-right-radius:var(--h); border-bottom-left-radius:var(--h);
+      background-image:linear-gradient(to top,rgba(26,90,42,.35),var(--leaf-light));
+    }
+    .stem-leaf--r1{transform:rotate(68deg) rotateY(28deg);animation:sl-r var(--fl-speed) 1.6s backwards;}
+    .stem-leaf--r2{top:44%;transform:rotate(68deg) rotateY(28deg);animation:sl-r var(--fl-speed) 1.4s backwards;}
+    .stem-leaf--l1{
+      border-top-right-radius:0;border-bottom-left-radius:0;
+      border-top-left-radius:var(--h);border-bottom-right-radius:var(--h);
+      left:-440%;transform:rotate(-68deg) rotateY(28deg);
+      animation:sl-l var(--fl-speed) 1.2s backwards;
+    }
+    .stem-leaf--l2{
+      border-top-right-radius:0;border-bottom-left-radius:0;
+      border-top-left-radius:var(--h);border-bottom-right-radius:var(--h);
+      left:-440%;top:42%;transform:rotate(-68deg) rotateY(28deg);
+      animation:sl-l var(--fl-speed) 1.0s backwards;
+    }
+    .stem-leaf--r3{top:0;transform-origin:left;transform:rotate(68deg) rotateY(28deg) scale(.55);animation:sl-r var(--fl-speed) 1.8s backwards;}
+    .stem-leaf--l3{
+      border-top-right-radius:0;border-bottom-left-radius:0;
+      border-top-left-radius:var(--h);border-bottom-right-radius:var(--h);
+      left:-430%;top:-2%;transform-origin:right;
+      transform:rotate(-68deg) rotateY(28deg) scale(.55);
+      animation:sl-l var(--fl-speed) 2.0s backwards;
+    }
+    @keyframes sl-r{0%{transform-origin:left;transform:rotate(68deg) rotateY(28deg) scale(0);}}
+    @keyframes sl-l{0%{transform-origin:right;transform:rotate(-68deg) rotateY(28deg) scale(0);}}
+
+    /* geciktirilmiş güller */
+    .flower--2 .stem-leaf--r1{animation-delay:1.9s;} .flower--2 .stem-leaf--r2{animation-delay:1.7s;}
+    .flower--2 .stem-leaf--l1{animation-delay:1.5s;} .flower--2 .stem-leaf--l2{animation-delay:1.3s;}
+    .flower--3 .stem-leaf--r1{animation-delay:2.5s;} .flower--3 .stem-leaf--r2{animation-delay:2.3s;}
+    .flower--3 .stem-leaf--l1{animation-delay:2.1s;} .flower--3 .stem-leaf--l2{animation-delay:1.9s;}
+
+    .flower--2 .p1-1,.flower--2 .p1-2,.flower--2 .p1-3,.flower--2 .p1-4,.flower--2 .p1-5{animation-delay:2.5s;}
+    .flower--2 .p2-1,.flower--2 .p2-2,.flower--2 .p2-3,.flower--2 .p2-4,.flower--2 .p2-5{animation-delay:2.3s;}
+    .flower--2 .p3-1,.flower--2 .p3-2,.flower--2 .p3-3,.flower--2 .p3-4,.flower--2 .p3-5{animation-delay:2.0s;}
+    .flower--2 .p4-1,.flower--2 .p4-2,.flower--2 .p4-3,.flower--2 .p4-4,.flower--2 .p4-5{animation-delay:1.8s;}
+    .flower--2 .p5-1,.flower--2 .p5-2,.flower--2 .p5-3,.flower--2 .p5-4,.flower--2 .p5-5{animation-delay:1.6s;}
+    .flower--3 .p1-1,.flower--3 .p1-2,.flower--3 .p1-3,.flower--3 .p1-4,.flower--3 .p1-5{animation-delay:3.0s;}
+    .flower--3 .p2-1,.flower--3 .p2-2,.flower--3 .p2-3,.flower--3 .p2-4,.flower--3 .p2-5{animation-delay:2.8s;}
+    .flower--3 .p3-1,.flower--3 .p3-2,.flower--3 .p3-3,.flower--3 .p3-4,.flower--3 .p3-5{animation-delay:2.6s;}
+    .flower--3 .p4-1,.flower--3 .p4-2,.flower--3 .p4-3,.flower--3 .p4-4,.flower--3 .p4-5{animation-delay:2.4s;}
+    .flower--3 .p5-1,.flower--3 .p5-2,.flower--3 .p5-3,.flower--3 .p5-4,.flower--3 .p5-5{animation-delay:2.2s;}
+
+    /* ══════════════════════════════════════════
+       AMBALAJ - MOBİL UYUMLU
+    ══════════════════════════════════════════ */
+    .bouquet-wrap{
+      position:absolute; bottom:-2vmin; left:50%;
+      transform:translateX(-50%);
+      z-index:5; transform-origin:bottom center;
+      animation:wrap-appear 1.4s 2.2s backwards;
+    }
+    @media (max-width: 480px) {
+      .bouquet-wrap { transform:translateX(-50%) scale(0.85); }
+    }
+    @keyframes wrap-appear{0%{opacity:0;transform:translateX(-50%) scaleY(.15);}}
+
+    .wrap-paper{
+      position:relative; width:52vmin; height:50vmin;
+      filter:drop-shadow(0 6px 20px rgba(4,3,10,.6));
+    }
+    .wrap-paper svg{width:100%;height:100%;overflow:visible;}
+
+    .wrap-ribbon{
+      position:absolute; top:27%; left:50%; transform:translateX(-50%);
+      width:92%; height:18px; z-index:20;
+    }
+    .wrap-ribbon svg{width:100%;height:100%;overflow:visible;}
+
+    .wrap-bow{
+      position:absolute; top:18%; left:50%; transform:translateX(-50%);
+      width:40vmin; height:24vmin; z-index:25;
+      animation:bow-sway 3.2s ease-in-out infinite;
+    }
+    @keyframes bow-sway{0%,100%{transform:translateX(-50%) rotate(-.5deg)} 50%{transform:translateX(-50%) rotate(.5deg)}}
+    .wrap-bow svg{width:100%;height:100%;overflow:visible;}
+
+    /* ── ZEMİN OTU ── */
+    .ground-grass{
+      position:absolute; bottom:10vmin;
+      transform-origin:bottom center; z-index:20;
+    }
+    .grass--left{
+      left:-9vmin; transform:rotate(-46deg) rotateY(38deg);
+      animation:grass-l 2s ease-in-out infinite;
+    }
+    .grass--right{
+      left:4vmin; transform:scale(.52) rotate(73deg) rotateX(8deg) rotateY(-192deg);
+      opacity:.72; animation:grass-r 1.8s ease-in-out infinite;
+    }
+    @keyframes grass-l{0%,100%{transform:rotate(-46deg) rotateY(38deg)} 50%{transform:rotate(-50deg) rotateY(38deg)}}
+    @keyframes grass-r{0%,100%{transform:scale(.52) rotate(73deg) rotateX(8deg) rotateY(-192deg)} 50%{transform:scale(.52) rotate(77deg) rotateX(8deg) rotateY(-192deg)}}
+    .grass-top{width:6.5vmin;height:9vmin;border-top-right-radius:100%;border-right:1.4vmin solid var(--leaf-light);transform:rotate(-2deg);}
+    .grass-bottom{margin-top:-2px;width:1.4vmin;height:23vmin;background-image:linear-gradient(to top,transparent,var(--leaf-light));}
+
+    /* ── UZUN YAN YAPRAKLAR ── */
+    .long-leaf{
+      --lw:14vmin; --lh:38vmin; --lc:#1a8040;
+      position:absolute; bottom:0;
+      width:var(--lw); height:var(--lh);
+      border-top-left-radius:100%;
+      border-left:1.8vmin solid var(--lc);
+      -webkit-mask-image:linear-gradient(to top,transparent 18%,#1a8040);
+      transform-origin:bottom center;
+    }
+    .long-g{position:absolute;bottom:22vmin;transform-origin:bottom left;}
+    .long-g--a{left:-38vmin;bottom:0;transform:scale(.75) rotate(-4deg);animation:lg-a 4s linear infinite;}
+    .long-g--b{left:-28vmin;bottom:-2vmin;transform:scale(.55) rotateX(55deg);}
+    .long-g--c{left:-14vmin;bottom:0;transform:scale(.5) rotateX(55deg);}
+    .long-g--d{left:22vmin;bottom:-2vmin;transform:scale(.55) rotateX(55deg);}
+    .long-g--e{left:38vmin;bottom:0;transform:scale(.75) rotate(2deg);animation:lg-e 4s linear infinite;}
+    .long-g--f{left:2vmin;bottom:-18vmin;z-index:100;filter:blur(.25vmin);transform:scale(.75) rotate(2deg);}
+    @keyframes lg-a{0%,100%{transform:scale(.75) rotate(-4deg)} 50%{transform:scale(.75) rotate(-6deg)}}
+    @keyframes lg-e{0%,100%{transform:scale(.75) rotate(2deg)} 50%{transform:scale(.75) rotate(4deg)}}
+    @keyframes leaf-alt{0%,100%{transform:rotateY(-180deg) rotate(5deg)} 50%{transform:rotateY(-180deg) rotate(0deg) scale(1.08)}}
+
+    .grow-ans{animation:grow-ans-kf 1.8s var(--d,0s) backwards;}
+    @keyframes grow-ans-kf{0%{transform:scale(0);opacity:0;}}
+
+    .not-loaded *{animation-play-state:paused !important;}
+
+    /* Yatay mobil mod */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .header-text { padding: 8px 16px 4px; }
+      .header-text h1 { font-size: clamp(14px, 4vh, 24px); }
+      .header-text p { display: none; }
+      .divider { display: none; }
+      .flowers { transform: scale(0.55); margin-bottom: -12vmin; }
+      .footer { bottom: 5px; }
+    }
+
+    /* Çok kısa ekranlar için */
+    @media (max-height: 700px) and (orientation: portrait) {
+      .header-text p { display: none; }
+      .divider { height: 15px !important; }
+      .flowers { margin-bottom: -6vmin; }
+    }
+  </style>
+</head>
+<body class="not-loaded">
+
+  <div class="loader" id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">Hazırlanıyor</div>
+  </div>
+
+  <div class="night"></div>
+  <div class="stars" id="stars"></div>
+
+  <div class="header-text">
+    <div class="eyebrow">Coded With Love · 2026</div>
+    <h1>Herkes sana çiçek alır<br><em>Ben senin için kodlarım</em></h1>
+    <p>Bu sonsuz beyaz güller seninle sonsuza kadar solmaz...</p>
+    <div class="divider"></div>
+    
+    <a href="https://wa.me/905346921987?text=Güller%20için%20çok%20teşekkür%20ederim%20Süleyman" class="wa-button" target="_blank">
+      Bir Teşekkür Mesajı Gönder
+    </a>
+  </div>
+  <div class="vignette"></div>
+
+  <div class="flowers">
+
+    <div class="flower flower--1">
+      <div class="flower__petals flower__petals--1">
+        <div class="petal petal-l5 p5-1"></div><div class="petal petal-l5 p5-2"></div>
+        <div class="petal petal-l5 p5-3"></div><div class="petal petal-l5 p5-4"></div><div class="petal petal-l5 p5-5"></div>
+        <div class="petal petal-l4 p4-1"></div><div class="petal petal-l4 p4-2"></div>
+        <div class="petal petal-l4 p4-3"></div><div class="petal petal-l4 p4-4"></div><div class="petal petal-l4 p4-5"></div>
+        <div class="petal petal-l3 p3-1"></div><div class="petal petal-l3 p3-2"></div>
+        <div class="petal petal-l3 p3-3"></div><div class="petal petal-l3 p3-4"></div><div class="petal petal-l3 p3-5"></div>
+        <div class="petal petal-l2 p2-1"></div><div class="petal petal-l2 p2-2"></div>
+        <div class="petal petal-l2 p2-3"></div><div class="petal petal-l2 p2-4"></div><div class="petal petal-l2 p2-5"></div>
+        <div class="petal petal-l1 p1-1"></div><div class="petal petal-l1 p1-2"></div>
+        <div class="petal petal-l1 p1-3"></div><div class="petal petal-l1 p1-4"></div><div class="petal petal-l1 p1-5"></div>
+        <div class="flower__center"></div>
+        <div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div>
+        <div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div>
+        <div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div>
+        <div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div>
+      </div>
+      <div class="flower__stem">
+        <div class="stem-leaf stem-leaf--r1"></div><div class="stem-leaf stem-leaf--r2"></div>
+        <div class="stem-leaf stem-leaf--l1"></div><div class="stem-leaf stem-leaf--l2"></div>
+        <div class="stem-leaf stem-leaf--r3"></div><div class="stem-leaf stem-leaf--l3"></div>
+      </div>
+    </div>
+
+    <div class="flower flower--2">
+      <div class="flower__petals flower__petals--2">
+        <div class="petal petal-l5 p5-1"></div><div class="petal petal-l5 p5-2"></div>
+        <div class="petal petal-l5 p5-3"></div><div class="petal petal-l5 p5-4"></div><div class="petal petal-l5 p5-5"></div>
+        <div class="petal petal-l4 p4-1"></div><div class="petal petal-l4 p4-2"></div>
+        <div class="petal petal-l4 p4-3"></div><div class="petal petal-l4 p4-4"></div><div class="petal petal-l4 p4-5"></div>
+        <div class="petal petal-l3 p3-1"></div><div class="petal petal-l3 p3-2"></div>
+        <div class="petal petal-l3 p3-3"></div><div class="petal petal-l3 p3-4"></div><div class="petal petal-l3 p3-5"></div>
+        <div class="petal petal-l2 p2-1"></div><div class="petal petal-l2 p2-2"></div>
+        <div class="petal petal-l2 p2-3"></div><div class="petal petal-l2 p2-4"></div><div class="petal petal-l2 p2-5"></div>
+        <div class="petal petal-l1 p1-1"></div><div class="petal petal-l1 p1-2"></div>
+        <div class="petal petal-l1 p1-3"></div><div class="petal petal-l1 p1-4"></div><div class="petal petal-l1 p1-5"></div>
+        <div class="flower__center"></div>
+        <div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div>
+        <div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div>
+        <div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div>
+        <div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div>
+      </div>
+      <div class="flower__stem">
+        <div class="stem-leaf stem-leaf--r1"></div><div class="stem-leaf stem-leaf--r2"></div>
+        <div class="stem-leaf stem-leaf--l1"></div><div class="stem-leaf stem-leaf--l2"></div>
+      </div>
+    </div>
+
+    <div class="flower flower--3">
+      <div class="flower__petals flower__petals--3">
+        <div class="petal petal-l5 p5-1"></div><div class="petal petal-l5 p5-2"></div>
+        <div class="petal petal-l5 p5-3"></div><div class="petal petal-l5 p5-4"></div><div class="petal petal-l5 p5-5"></div>
+        <div class="petal petal-l4 p4-1"></div><div class="petal petal-l4 p4-2"></div>
+        <div class="petal petal-l4 p4-3"></div><div class="petal petal-l4 p4-4"></div><div class="petal petal-l4 p4-5"></div>
+        <div class="petal petal-l3 p3-1"></div><div class="petal petal-l3 p3-2"></div>
+        <div class="petal petal-l3 p3-3"></div><div class="petal petal-l3 p3-4"></div><div class="petal petal-l3 p3-5"></div>
+        <div class="petal petal-l2 p2-1"></div><div class="petal petal-l2 p2-2"></div>
+        <div class="petal petal-l2 p2-3"></div><div class="petal petal-l2 p2-4"></div><div class="petal petal-l2 p2-5"></div>
+        <div class="petal petal-l1 p1-1"></div><div class="petal petal-l1 p1-2"></div>
+        <div class="petal petal-l1 p1-3"></div><div class="petal petal-l1 p1-4"></div><div class="petal petal-l1 p1-5"></div>
+        <div class="flower__center"></div>
+        <div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div>
+        <div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div>
+        <div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div>
+        <div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div>
+      </div>
+      <div class="flower__stem">
+        <div class="stem-leaf stem-leaf--r1"></div><div class="stem-leaf stem-leaf--r2"></div>
+        <div class="stem-leaf stem-leaf--l1"></div><div class="stem-leaf stem-leaf--l2"></div>
+      </div>
+    </div>
+
+    <div style="animation:grow-ans-kf 1s 2.2s backwards">
+      <div class="ground-grass grass--left">
+        <div class="grass-top"></div><div class="grass-bottom"></div>
+      </div>
+    </div>
+    <div style="animation:grow-ans-kf 1s 2.5s backwards">
+      <div class="ground-grass grass--right">
+        <div class="grass-top"></div><div class="grass-bottom"></div>
+      </div>
+    </div>
+
+    <div class="long-g long-g--a grow-ans" style="--d:3.0s">
+      <div class="long-leaf" style="--lh:55vmin;left:-1vmin;"></div>
+      <div class="long-leaf" style="--lw:9vmin;--lh:38vmin;left:-.5vmin;bottom:5vmin;transform-origin:bottom left;transform:rotateY(-180deg);animation:leaf-alt 3s linear infinite"></div>
+    </div>
+    <div class="long-g long-g--b grow-ans" style="--d:3.4s">
+      <div class="long-leaf" style="--lw:12vmin;--lh:35vmin;transform:rotateY(-180deg)"></div>
+    </div>
+    <div class="long-g long-g--c grow-ans" style="--d:3.6s">
+      <div class="long-leaf" style="--lw:12vmin;--lh:35vmin"></div>
+    </div>
+    <div class="long-g long-g--d grow-ans" style="--d:3.4s">
+      <div class="long-leaf" style="--lw:12vmin;--lh:35vmin;transform:rotateY(-180deg)"></div>
+    </div>
+    <div class="long-g long-g--e grow-ans" style="--d:3.0s">
+      <div class="long-leaf" style="--lh:55vmin"></div>
+      <div class="long-leaf" style="--lw:9vmin;--lh:38vmin;transform:rotateY(-180deg);animation:leaf-alt 3.5s linear infinite"></div>
+    </div>
+    <div class="long-g long-g--f grow-ans" style="--d:4.0s">
+      <div class="long-leaf" style="--lh:48vmin;filter:blur(.2vmin);opacity:.78"></div>
+    </div>
+
+    <div class="bouquet-wrap">
+
+      <div class="wrap-paper">
+        <svg viewBox="0 0 540 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="pL" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"   stop-color="#f0ece4"/>
+              <stop offset="40%"  stop-color="#faf8f3"/>
+              <stop offset="100%" stop-color="#e0dbd2"/>
+            </linearGradient>
+            <linearGradient id="pR" x1="1" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="#ffffff"/>
+              <stop offset="50%"  stop-color="#fdfcf9"/>
+              <stop offset="100%" stop-color="#e8e3da"/>
+            </linearGradient>
+            <linearGradient id="pBg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"   stop-color="#cac4ba"/>
+              <stop offset="100%" stop-color="#b4aea4"/>
+            </linearGradient>
+            <filter id="gs"><feGaussianBlur stdDeviation="9"/></filter>
+          </defs>
+
+          <ellipse cx="270" cy="496" rx="115" ry="16" fill="rgba(4,3,10,.55)" filter="url(#gs)"/>
+
+          <path d="M 58 28 C 58 200, 148 378, 202 496 L 338 496 C 392 378, 482 200, 482 28 Z"
+                fill="url(#pBg)" opacity=".82"/>
+
+          <path d="M 82 28 C 82 200, 162 374, 212 496 L 270 496 L 270 28 Z"
+                fill="url(#pL)"/>
+
+          <path d="M 458 28 C 458 200, 378 374, 328 496 L 270 496 L 270 28 Z"
+                fill="url(#pR)"/>
+
+          <line x1="270" y1="28" x2="270" y2="496" stroke="rgba(165,152,135,.32)" stroke-width="1"/>
+
+          <g stroke="rgba(110,98,82,.065)" stroke-width=".9">
+            <line x1="94" y1="78"  x2="446" y2="78"/>  <line x1="104" y1="118" x2="436" y2="118"/>
+            <line x1="116" y1="158" x2="424" y2="158"/> <line x1="130" y1="198" x2="410" y2="198"/>
+            <line x1="146" y1="238" x2="394" y2="238"/> <line x1="164" y1="278" x2="376" y2="278"/>
+            <line x1="182" y1="318" x2="358" y2="318"/> <line x1="198" y1="358" x2="342" y2="358"/>
+            <line x1="208" y1="398" x2="332" y2="398"/> <line x1="216" y1="438" x2="324" y2="438"/>
+          </g>
+
+          <path d="M 82 28 L 154 28 L 118 57 Z" fill="rgba(190,180,165,.82)"/>
+          <path d="M 458 28 L 386 28 L 422 57 Z" fill="rgba(180,170,155,.78)"/>
+
+          <path d="M 82 28 C 82 200, 162 374, 212 496 L 328 496 C 378 374, 458 200, 458 28"
+                fill="none" stroke="rgba(145,132,115,.28)" stroke-width="1.2"/>
+        </svg>
+      </div>
+
+      <div class="wrap-ribbon">
+        <svg viewBox="0 0 490 18" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="rG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="#9e7238"/>
+              <stop offset="22%"  stop-color="#c8975e"/>
+              <stop offset="44%"  stop-color="#e6c282"/>
+              <stop offset="56%"  stop-color="#f0d29a"/>
+              <stop offset="78%"  stop-color="#c6905e"/>
+              <stop offset="100%" stop-color="#986a38"/>
+            </linearGradient>
+          </defs>
+          <path d="M 0 5 L 490 2 L 490 16 L 0 18 Z" fill="url(#rG)"/>
+          <path d="M 0 5 L 490 2 L 490 7 L 0 10 Z" fill="rgba(255,235,168,.2)"/>
+        </svg>
+      </div>
+
+      <div class="wrap-bow">
+        <svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bL" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"   stop-color="#ae8438"/>
+              <stop offset="35%"  stop-color="#d2a65a"/>
+              <stop offset="65%"  stop-color="#eacb84"/>
+              <stop offset="100%" stop-color="#ae7832"/>
+            </linearGradient>
+            <linearGradient id="bR" x1="1" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="#be9244"/>
+              <stop offset="50%"  stop-color="#e6c676"/>
+              <stop offset="100%" stop-color="#9e7030"/>
+            </linearGradient>
+            <radialGradient id="kG" cx="38%" cy="32%" r="62%">
+              <stop offset="0%"   stop-color="#f8de94"/>
+              <stop offset="48%"  stop-color="#d2a455"/>
+              <stop offset="100%" stop-color="#9e7030"/>
+            </radialGradient>
+            <filter id="bsh"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="rgba(4,3,10,.42)"/></filter>
+          </defs>
+
+          <path d="M 200 118
+                   C 158 116, 90 74, 62 95
+                   C 36 114, 66 158, 112 140
+                   C 150 126, 176 120, 195 118 Z"
+                fill="url(#bL)" filter="url(#bsh)"/>
+          <path d="M 194 118 C 174 120, 145 126, 110 142 C 78 156, 46 120, 66 98"
+                fill="none" stroke="rgba(70,42,8,.14)" stroke-width="3.5"/>
+          <path d="M 182 118 C 150 120, 104 106, 78 112"
+                fill="none" stroke="rgba(255,228,145,.28)" stroke-width="1.4"/>
+
+          <path d="M 200 118
+                   C 242 116, 310 74, 338 95
+                   C 364 114, 334 158, 288 140
+                   C 250 126, 224 120, 205 118 Z"
+                fill="url(#bR)" filter="url(#bsh)"/>
+          <path d="M 206 118 C 226 120, 255 126, 290 142 C 322 156, 354 120, 334 98"
+                fill="none" stroke="rgba(70,42,8,.14)" stroke-width="3.5"/>
+          <path d="M 218 118 C 250 120, 296 106, 322 112"
+                fill="none" stroke="rgba(255,228,145,.28)" stroke-width="1.4"/>
+
+          <path d="M 190 122 C 183 145, 168 178, 160 212
+                   C 156 226, 163 228, 167 214
+                   C 174 180, 188 147, 194 124 Z"
+                fill="url(#bL)"/>
+          <path d="M 192 124 C 185 148, 172 180, 163 213"
+                fill="none" stroke="rgba(255,228,145,.2)" stroke-width="1"/>
+
+          <path d="M 210 122 C 217 145, 232 178, 240 212
+                   C 244 226, 237 228, 233 214
+                   C 226 180, 212 147, 206 124 Z"
+                fill="url(#bR)"/>
+          <path d="M 208 124 C 215 148, 228 180, 237 213"
+                fill="none" stroke="rgba(255,228,145,.2)" stroke-width="1"/>
+
+          <ellipse cx="200" cy="118" rx="17" ry="13" fill="url(#kG)"/>
+          <ellipse cx="195" cy="113" rx="8.5" ry="5.5" fill="rgba(255,242,178,.36)"/>
+        </svg>
+      </div>
+
+    </div></div><div class="footer">
+    <span>∞ Sonsuz Güller</span>
+    <span class="heart">♡</span>
+    <span>Özel Tasarım</span>
+  </div>
+
+  <script>
+    // Yıldızlar - azaltılmış
+    const st = document.getElementById('stars');
+    const starCount = window.innerWidth < 768 ? 35 : 50;
+    for (let i = 0; i < starCount; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const sz = Math.random() * 1.4 + 0.3;
+      s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*70}%;left:${Math.random()*100}%;--d:${(Math.random()*3+1.4).toFixed(1)}s;--del:${(Math.random()*4).toFixed(1)}s;`;
+      st.appendChild(s);
+    }
+
+    // Başlat
+    window.onload = () => {
+      const t = setTimeout(() => {
+        document.body.classList.remove('not-loaded');
+        clearTimeout(t);
+        setTimeout(() => document.getElementById('loader').classList.add('hidden'), 800);
+      }, 600);
+    };
+
+    // Mobil dokunma optimizasyonu
+    document.addEventListener('touchmove', function(e) {
+      if (e.scale !== 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+  </script>
+
+</body>
+</html>
